@@ -36,53 +36,86 @@
         </ui:TitleBar>
         <TabControl Grid.Row="1">
             <TabItem Header="Dashboard">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <TextBlock FontSize="20" FontWeight="Medium" VerticalAlignment="Center" Grid.Row="0" HorizontalAlignment="Center">👋Hi there!What do you would like to do today?</TextBlock>
-                    <WrapPanel Grid.Row="1" Margin="0,10,0,0">
-                        <ui:Card>
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="*"/>
-                                </Grid.RowDefinitions>
-                                <StackPanel Grid.Row="0" Orientation="Horizontal">
-                                    <ui:SymbolIcon Symbol="CloudOff24" Margin="0,0,15,0"></ui:SymbolIcon>
-                                    <TextBlock FontSize="16" FontWeight="Bold">
-                                    Websites Blocker
-                                    </TextBlock>
-                                </StackPanel>
-                                <TextBlock Grid.Row="1" FontWeight="SemiBold">
-                                    Use regular expressions, wildcards,
-                                    <LineBreak/>
-                                    etc. to block any websites you want to block!
-                                </TextBlock>
-                            </Grid>
-                        </ui:Card>
-                        <ui:Card>
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="*"/>
-                                </Grid.RowDefinitions>
-                                <StackPanel Grid.Row="0" Orientation="Horizontal">
-                                    <ui:SymbolIcon Symbol="QrCode24" Margin="0,0,15,0"></ui:SymbolIcon>
-                                    <TextBlock FontSize="16" FontWeight="Bold">
-                                        Websites Unblocker
-                                    </TextBlock>
-                                </StackPanel>
-                                <TextBlock Grid.Row="1" FontWeight="SemiBold">
-                                    Scan the QR code to unlock the block for 40 minutes, 
-                                    <LineBreak/>
-                                    then block again!
-                                </TextBlock>
-                            </Grid>
-                        </ui:Card>
-                    </WrapPanel>
+                    <StackPanel Grid.Row="0">
+                        <Border Width="66" Height="66" CornerRadius="18"
+                    Background="{DynamicResource AccentFillColorSecondaryBrush}">
+                            <Image Source="pack://application:,,,/Assets/wpfui-icon-256.png" Width="42" Height="42"/>
+                        </Border>
+                        <TextBlock TextAlignment="Center" FontSize="22" FontWeight="Bold">School PC Websites Blocker</TextBlock>
+                        <TextBlock TextAlignment="Center" FontSize="18" FontWeight="Thin">Produced by the WASC team</TextBlock>
+                    </StackPanel>
+                    <TextBlock FontSize="20" FontWeight="Medium" VerticalAlignment="Center" Grid.Row="1" HorizontalAlignment="Center">👋Hi there!What do you would like to do today?</TextBlock>
+                        <Grid Grid.Row="2" Margin="0,10,0,0" >
+                            <WrapPanel>
+                                <ui:Card >
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+                                        <StackPanel Grid.Row="0" Orientation="Horizontal">
+                                            <ui:SymbolIcon Symbol="CloudOff24" Margin="0,0,15,0"></ui:SymbolIcon>
+                                            <TextBlock FontSize="16" FontWeight="Bold">
+                Websites Blocker
+                                            </TextBlock>
+                                        </StackPanel>
+                                        <TextBlock Grid.Row="1" FontWeight="SemiBold">
+                Use regular expressions, wildcards,
+                <LineBreak/>
+                etc. to block any websites you want to block!
+                                        </TextBlock>
+                                    </Grid>
+                                </ui:Card>
+                                <ui:Card>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+                                        <StackPanel Grid.Row="0" Orientation="Horizontal">
+                                            <ui:SymbolIcon Symbol="QrCode24" Margin="0,0,15,0"></ui:SymbolIcon>
+                                            <TextBlock FontSize="16" FontWeight="Bold">
+                    Websites Unblocker
+                                            </TextBlock>
+                                        </StackPanel>
+                                        <TextBlock Grid.Row="1" FontWeight="SemiBold">
+                Scan the QR code to unlock the block for 40 minutes, 
+                <LineBreak/>
+                then block again!
+                                        </TextBlock>
+                                    </Grid>
+                                </ui:Card>
+                                <ui:Card>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+                                        <StackPanel Grid.Row="0" Orientation="Horizontal">
+                                            <ui:SymbolIcon Symbol="Info24" Margin="0,0,15,0"></ui:SymbolIcon>
+                                            <TextBlock FontSize="16" FontWeight="Bold">
+                    Browser usage time
+                                            </TextBlock>
+                                        </StackPanel>
+                                        <TextBlock Grid.Row="1" FontWeight="SemiBold">
+                Get the 24-hour usage duration of browsers
+                <LineBreak/>
+                like Microsoft Edge,Google Chrome, etc.!
+                                        </TextBlock>
+                                    </Grid>
+                                </ui:Card>
+                            </WrapPanel>
+                        </Grid>
+                    
                 </Grid>
+                </ScrollViewer>
             </TabItem>
         </TabControl>
         <ContentPresenter x:Name="RootContentDialog" Grid.Row="0" />

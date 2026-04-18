@@ -5,7 +5,9 @@
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:local="clr-namespace:SPCWB.Views.Windows"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:sys="clr-namespace:System;assembly=System.Runtime"
   xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+  xmlns:helpers="clr-namespace:SPCWB.Helpers"
   Title="{Binding ViewModel.ApplicationTitle, Mode=OneWay}"
   Width="1100"
   Height="650"
@@ -19,6 +21,9 @@
   WindowStartupLocation="CenterScreen"
   mc:Ignorable="d" WindowStyle="None"
 >
+    <Window.Resources>
+        <helpers:RedirectConventer x:Key="RedirectConverter"/>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -34,27 +39,37 @@
                 <ui:ImageIcon Source="pack://application:,,,/Assets/wpfui-icon-256.png" />
             </ui:TitleBar.Icon>
         </ui:TitleBar>
-        <TabControl Grid.Row="1">
+        <TabControl Grid.Row="1" x:Name="tab">
             <TabItem Header="Dashboard">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    <StackPanel Grid.Row="0">
-                        <Border Width="66" Height="66" CornerRadius="18"
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Row="0">
+                            <Border Width="66" Height="66" CornerRadius="18"
                     Background="{DynamicResource AccentFillColorSecondaryBrush}">
-                            <Image Source="pack://application:,,,/Assets/wpfui-icon-256.png" Width="42" Height="42"/>
-                        </Border>
-                        <TextBlock TextAlignment="Center" FontSize="22" FontWeight="Bold">School PC Websites Blocker</TextBlock>
-                        <TextBlock TextAlignment="Center" FontSize="18" FontWeight="Thin">Produced by the WASC team</TextBlock>
-                    </StackPanel>
-                    <TextBlock FontSize="20" FontWeight="Medium" VerticalAlignment="Center" Grid.Row="1" HorizontalAlignment="Center">👋Hi there!What do you would like to do today?</TextBlock>
+                                <Image Source="pack://application:,,,/Assets/wpfui-icon-256.png" Width="42" Height="42"/>
+                            </Border>
+                            <TextBlock TextAlignment="Center" FontSize="22" FontWeight="Bold">School PC Websites Blocker</TextBlock>
+                            <TextBlock TextAlignment="Center" FontSize="18" FontWeight="Thin">Produced by the WASC team</TextBlock>
+                        </StackPanel>
+                        <TextBlock FontSize="20" FontWeight="Medium" VerticalAlignment="Center" Grid.Row="1" HorizontalAlignment="Center">👋Hi there!What would you like to do today?</TextBlock>
                         <Grid Grid.Row="2" Margin="0,10,0,0" >
                             <WrapPanel>
-                                <ui:Card >
+                                <Button Command="{Binding ViewModel.RedirectToPageCommand}">
+                                    <Button.CommandParameter>
+                                        <MultiBinding Converter="{StaticResource RedirectConverter}">
+                                            <Binding ElementName="tab"/>
+                                            <Binding>
+                                                <Binding.Source>
+                                                    <sys:Int32>1</sys:Int32>
+                                                </Binding.Source>
+                                            </Binding>
+                                        </MultiBinding>
+                                    </Button.CommandParameter>
                                     <Grid>
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto"/>
@@ -72,8 +87,18 @@
                 etc. to block any websites you want to block!
                                         </TextBlock>
                                     </Grid>
-                                </ui:Card>
-                                <ui:Card>
+                                </Button>
+                                <Button Command="{Binding ViewModel.RedirectToPageCommand}">
+                                    <Button.CommandParameter>
+                                        <MultiBinding Converter="{StaticResource RedirectConverter}">
+                                            <Binding ElementName="tab"/>
+                                            <Binding>
+                                                <Binding.Source>
+                                                    <sys:Int32>2</sys:Int32>
+                                                </Binding.Source>
+                                            </Binding>
+                                        </MultiBinding>
+                                    </Button.CommandParameter>
                                     <Grid>
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto"/>
@@ -91,8 +116,18 @@
                 then block again!
                                         </TextBlock>
                                     </Grid>
-                                </ui:Card>
-                                <ui:Card>
+                                </Button>
+                                <Button Command="{Binding ViewModel.RedirectToPageCommand}">
+                                    <Button.CommandParameter>
+                                        <MultiBinding Converter="{StaticResource RedirectConverter}">
+                                            <Binding ElementName="tab"/>
+                                            <Binding>
+                                                <Binding.Source>
+                                                    <sys:Int32>3</sys:Int32>
+                                                </Binding.Source>
+                                            </Binding>
+                                        </MultiBinding>
+                                    </Button.CommandParameter>
                                     <Grid>
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto"/>
@@ -110,12 +145,30 @@
                 like Microsoft Edge,Google Chrome, etc.!
                                         </TextBlock>
                                     </Grid>
-                                </ui:Card>
+                                </Button>
                             </WrapPanel>
                         </Grid>
-                    
-                </Grid>
+
+                    </Grid>
                 </ScrollViewer>
+            </TabItem>
+            <TabItem Header="Websites Blocker">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock FontSize="20" FontWeight="Bold" Grid.Row="0">Blocked List</TextBlock>
+                    <ListView Grid.Row="1">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding Name}" Width="100"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Grid>
             </TabItem>
         </TabControl>
         <ContentPresenter x:Name="RootContentDialog" Grid.Row="0" />

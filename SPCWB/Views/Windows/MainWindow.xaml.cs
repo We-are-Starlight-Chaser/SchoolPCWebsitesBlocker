@@ -20,6 +20,14 @@ namespace SPCWB.Views.Windows
             SystemThemeWatcher.Watch(this);
 
             InitializeComponent();
+            Closing += MainWindow_Closing;
+        }
+
+        private void MainWindow_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
+        {
+            //仅在发行版使用!!!
+            e.Cancel = true;
+            Hide();
         }
 
         /// <summary>
@@ -27,6 +35,8 @@ namespace SPCWB.Views.Windows
         /// </summary>
         protected override void OnClosed(EventArgs e)
         {
+            //仅在发行版使用
+            
             base.OnClosed(e);
 
             // Make sure that closing this window will begin the process of closing the application.

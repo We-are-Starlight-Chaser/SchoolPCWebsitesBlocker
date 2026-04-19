@@ -20,7 +20,14 @@ namespace SPCWB.Views.Windows
             SystemThemeWatcher.Watch(this);
 
             InitializeComponent();
+            ContentRendered += MainWindow_ContentRendered;
             Closing += MainWindow_Closing;
+        }
+
+        private void MainWindow_ContentRendered(object? sender, EventArgs e)
+        {
+            //仅在发行版使用!!!
+            Hide();
         }
 
         private void MainWindow_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
@@ -35,7 +42,6 @@ namespace SPCWB.Views.Windows
         /// </summary>
         protected override void OnClosed(EventArgs e)
         {
-            //仅在发行版使用
             
             base.OnClosed(e);
 

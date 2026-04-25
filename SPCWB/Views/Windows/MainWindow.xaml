@@ -6,6 +6,7 @@
   xmlns:local="clr-namespace:SPCWB.Views.Windows"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:sys="clr-namespace:System;assembly=System.Runtime"
+  xmlns:md="clr-namespace:Markdig.Wpf;assembly=Markdig.Wpf"
   xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
   xmlns:helpers="clr-namespace:SPCWB.Helpers"
   xmlns:tb="http://www.hardcodet.net/taskbar"
@@ -199,7 +200,8 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <TextBlock FontSize="20" FontWeight="Bold" Grid.Row="0">Blocked List</TextBlock>
-                    <ui:ListView Grid.Row="1" ItemsSource="{Binding ViewModel.BlockerItems}" Margin="5">
+                    <Border Grid.Row="1" Margin="5" BorderThickness="5">
+                    <ui:ListView ItemsSource="{Binding ViewModel.BlockerItems}" IsEnabled="{Binding ViewModel.CanChangeBlocker}">
                         <ui:ListView.ItemTemplate>
                             <DataTemplate>
                                 <Grid>
@@ -211,12 +213,14 @@
                                         <TextBlock FontSize="16" FontWeight="Medium" Text="{Binding Name}"/>
                                         <TextBlock Text="{Binding Description}" FontSize="14" TextWrapping="Wrap"/>
                                     </StackPanel>
-                                    <CheckBox Grid.Column="1" IsEnabled="{Binding ViewModel.CanChangeBlocker}" IsChecked="{Binding IsBlocked}" HorizontalAlignment="Right" Margin="0,0,5,0">Blocked</CheckBox>
+                                    <CheckBox Grid.Column="1" IsChecked="{Binding IsBlocked}" HorizontalAlignment="Right" Margin="0,0,5,0">Blocked</CheckBox>
                                 </Grid>
                             </DataTemplate>
                         </ui:ListView.ItemTemplate>
                     </ui:ListView>
+                    </Border>
                 </Grid>
+
             </TabItem>
             <TabItem Header="Websites Unblocker">
                 <Grid>
@@ -252,6 +256,23 @@
                             <Button Command="{Binding ViewModel.VerifyTheVerificationCodeCommand}" HorizontalAlignment="Stretch">Verify</Button>
                         </StackPanel>
                     </StackPanel>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Settings">
+                <Grid>
+                    <Expander>
+                        <Expander.Header>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Image Source="pack://application:,,,/Assets/wpfui-icon-256.png" Width="22" Height="22" Grid.Column="0"/>
+                                    <TextBlock Text="©2026 We Are Starlight Chaser,All rights reserved." FontSize="14" FontWeight="Bold" Grid.Column="1" Margin="5,0,0,0"/>
+                            </Grid>
+                        </Expander.Header>
+                        <md:MarkdownViewer Markdown="{Binding ViewModel.MarkdownText,Mode=OneWay}"></md:MarkdownViewer>
+                    </Expander>
                 </Grid>
             </TabItem>
         </TabControl>

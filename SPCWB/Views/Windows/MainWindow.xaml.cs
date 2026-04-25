@@ -24,10 +24,11 @@ namespace SPCWB.Views.Windows
             Closing += MainWindow_Closing;
         }
 
-        private void MainWindow_ContentRendered(object? sender, EventArgs e)
+        private async void MainWindow_ContentRendered(object? sender, EventArgs e)
         {
             //仅在发行版使用!!!
             Hide();
+            await ViewModel.ReadMarkdownFileAsync();
         }
 
         private void MainWindow_Closing(object? sender, System.ComponentModel.CancelEventArgs e)

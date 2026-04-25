@@ -2,8 +2,12 @@
 using SPCWB.Models;
 using System.Collections.ObjectModel;
 using System.Drawing;
+using System.IO;
+using System.IO.Packaging;
+using System.Runtime.InteropServices;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
+using System.Windows.Resources;
 using Wpf.Ui.Controls;
 
 namespace SPCWB.ViewModels.Windows
@@ -59,7 +63,9 @@ namespace SPCWB.ViewModels.Windows
                 }
                 if (verificationCode.Equals(InputedVerificationCode))
                 {
-                    CanChangeBlocker = true;
+#pragma warning disable CS4014
+                    ChangeBolcker();
+#pragma warning restore CS4014
                     await new Wpf.Ui.Controls.MessageBox()
                     {
                         Title = "Verification code",
@@ -84,20 +90,32 @@ namespace SPCWB.ViewModels.Windows
         private async Task GetQrCodeAsync()
         {
             QRCodeGenerator qrGenerator = new();
-            verificationCode = await GetVerificationCodeAsync();
-            QRCodeData qrCodeData = qrGenerator.CreateQrCode("https://wasc.qzz.io/products/api/spcwb/qrcode.html?vc=" + verificationCode, QRCodeGenerator.ECCLevel.Q);
+            verificationCode = await GetVerificationCodeAsync().ConfigureAwait(false);
+            QRCodeData qrCodeData = qrGenerator.CreateQrCode($"https://wasc.qzz.io/products/api/spcwb/qrcode.html?vc={verificationCode}", QRCodeGenerator.ECCLevel.Q);
             QRCode qrCode = new(qrCodeData);
-            Bitmap qrCodeImage = qrCode.GetGraphic(100, Color.Black, Color.White, true);
 
-
+            using Bitmap qrCodeImage = qrCode.GetGraphic(100, Color.Black, Color.White, true);
             IntPtr hBitmap = qrCodeImage.GetHbitmap();
-            // 将位图转换为 WPF 可以使用的 BitmapSource
-            QrSource = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
-                hBitmap,
-                IntPtr.Zero,
-                System.Windows.Int32Rect.Empty,
-                BitmapSizeOptions.FromEmptyOptions());
+
+            try
+            {
+                QrSource = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
+                    hBitmap,
+                    IntPtr.Zero,
+                    Int32Rect.Empty,
+                    BitmapSizeOptions.FromEmptyOptions());
+            }
+            finally
+            {
+                if (hBitmap != IntPtr.Zero)
+                {
+                    DeleteObject(hBitmap);
+                }
+            }
         }
+        [LibraryImport("gdi32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static partial bool DeleteObject(IntPtr hObject);
         private async Task<string> GetVerificationCodeAsync()
         {
 
@@ -111,16 +129,41 @@ namespace SPCWB.ViewModels.Windows
                     rand = new Random(i * temp * (int)DateTime.Now.Ticks);
                 var t = rand.Next(strCode.Length - 1);
                 if (!string.IsNullOrWhiteSpace(randomCode))
-                    while (randomCode.ToLower().Contains(_charArray[t].ToString().ToLower()))
+                    while (randomCode.Contains(_charArray[t].ToString(), StringComparison.CurrentCultureIgnoreCase))
                         t = rand.Next(strCode.Length - 1);
                 if (temp == t)
-                    return await GetVerificationCodeAsync();
+                    return await GetVerificationCodeAsync().ConfigureAwait(false);
                 temp = t;
 
                 randomCode += _charArray[t];
             }
 
             return randomCode;
+        }
+        private async Task ChangeBolcker()
+        {
+            CanChangeBlocker = true;
+            //生产环境使用
+            //await Task.Delay(40 * 60 * 1000);
+            await Task.Delay(6000);
+            CanChangeBlocker = false;
+        }
+        #endregion
+        #region Settings Helper
+        [ObservableProperty]
+        private string _markdownText = "";
+        public async Task ReadMarkdownFileAsync()
+        {
+            try
+            {
+                Uri uri = new("pack://application:,,,/Assets/About.md", UriKind.Absolute);
+                StreamResourceInfo info = Application.GetResourceStream(uri);
+                using var reader = new StreamReader(info.Stream);
+                MarkdownText = await reader.ReadToEndAsync();
+            }
+            catch{ 
+                
+            }
         }
         #endregion
     }

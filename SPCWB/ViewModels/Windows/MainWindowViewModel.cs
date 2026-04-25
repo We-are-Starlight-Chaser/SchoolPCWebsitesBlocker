@@ -14,6 +14,10 @@ namespace SPCWB.ViewModels.Windows
 {
     public partial class MainWindowViewModel : ObservableObject
     {
+        public MainWindowViewModel()
+        {
+            _ = GetQrCodeAsync();
+        }
         #region Window Helper
         [ObservableProperty]
         private string _applicationTitle = "SPCWB";
@@ -48,6 +52,7 @@ namespace SPCWB.ViewModels.Windows
         private string _inputedVerificationCode = "";
         private readonly string strCode = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ123456789";
         private string verificationCode = "";
+        private int createdTimes;
         [RelayCommand]
         private async Task VerifyTheVerificationCodeAsync()
         {
@@ -91,7 +96,7 @@ namespace SPCWB.ViewModels.Windows
         {
             QRCodeGenerator qrGenerator = new();
             verificationCode = await GetVerificationCodeAsync().ConfigureAwait(false);
-            QRCodeData qrCodeData = qrGenerator.CreateQrCode($"https://wasc.qzz.io/products/api/spcwb/qrcode.html?vc={verificationCode}", QRCodeGenerator.ECCLevel.Q);
+            QRCodeData qrCodeData = qrGenerator.CreateQrCode($"https://wasc.qzz.io/api/products/spcwb/qrcode.html?vc={verificationCode}", QRCodeGenerator.ECCLevel.Q);
             QRCode qrCode = new(qrCodeData);
 
             using Bitmap qrCodeImage = qrCode.GetGraphic(100, Color.Black, Color.White, true);
@@ -110,6 +115,11 @@ namespace SPCWB.ViewModels.Windows
                 if (hBitmap != IntPtr.Zero)
                 {
                     DeleteObject(hBitmap);
+                }
+                createdTimes++;
+                if(createdTimes >= 10)
+                {
+                    GC.Collect();
                 }
             }
         }

@@ -260,7 +260,11 @@
             </TabItem>
             <TabItem Header="Settings">
                 <Grid>
-                    <Expander>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Expander Grid.Row="1">
                         <Expander.Header>
                             <Grid>
                                 <Grid.ColumnDefinitions>
@@ -271,7 +275,7 @@
                                     <TextBlock Text="©2026 We Are Starlight Chaser,All rights reserved." FontSize="14" FontWeight="Bold" Grid.Column="1" Margin="5,0,0,0"/>
                             </Grid>
                         </Expander.Header>
-                        <md:MarkdownViewer Markdown="{Binding ViewModel.MarkdownText,Mode=OneWay}"></md:MarkdownViewer>
+                        <md:MarkdownViewer Markdown="{Binding ViewModel.MarkdownText,Mode=OneWay,IsAsync=True}"/>
                     </Expander>
                 </Grid>
             </TabItem>
